@@ -1,0 +1,82 @@
+plugins {
+	id 'org.springframework.boot' version '2.6.7'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.gng'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	
+	// Spring security
+	implementation 'org.springframework.security:spring-security-core:5.6.2'
+	implementation 'org.springframework.security:spring-security-web:5.6.2'
+	implementation 'org.springframework.security:spring-security-config:5.6.2'
+	
+	
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+	
+	
+	// Common
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	
+	
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	
+	
+	// Database
+	runtimeOnly 'mysql:mysql-connector-java'
+	runtimeOnly 'com.h2database:h2'
+	
+	
+	// JPA
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	
+	
+	// Swagger
+	implementation 'io.swagger:swagger-annotations:1.6.5'
+	
+	
+	// Util
+	implementation 'com.google.guava:guava:31.1-jre'
+	implementation 'com.google.code.gson:gson:2.9.0'
+	
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot:3.0.4'
+	
+	
+	// Test
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
+	
+	testImplementation 'org.junit.vintage:junit-vintage-engine:5.8.2'
+	
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	
+	testImplementation 'org.hamcrest:hamcrest-library:2.2'
+	
+	testImplementation 'org.mockito:mockito-core:4.4.0'
+	testImplementation 'org.mockito:mockito-junit-jupiter:4.4.0'
+	testImplementation 'org.assertj:assertj-core:3.22.0'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
