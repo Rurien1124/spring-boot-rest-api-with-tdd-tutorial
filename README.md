@@ -29,7 +29,7 @@
   PUT /user/4  // id의 값이 4인 user를 수정
   ```
   
-  > 자기 서술형 메시지(self-descriptive messages)
+  > ### 자기 서술형 메시지(self-descriptive messages)
   - 자신을 어떻게 처리해야 할 지에 대한 정보를 가지고 있어야 함. 메시지의 내용으로 해석이 가능하여야 함
   ```
   // 1-1. 목적지가 빠진 요청 메시지
@@ -50,7 +50,7 @@
   {"id": 1}
   ```
   
-  > 애플리케이션 상태 엔진으로서의 하이퍼미디어(**H**ypermedia **A**s **T**he **E**ngine **O**f **A**pplication **S**tate)
+  > ### 애플리케이션 상태 엔진으로서의 하이퍼미디어(**H**ypermedia **A**s **T**he **E**ngine **O**f **A**pplication **S**tate)
   - 애플리케이션의 상태는 Hyperlink를 통해 전이되어야 함
   - 이를 통해 서버의 URI가 변경되는 경우가 발생하여도 클라이언트에 영향이 가지 않음
   ```
