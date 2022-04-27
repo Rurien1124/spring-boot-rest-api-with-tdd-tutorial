@@ -1,37 +1,74 @@
 package com.gng.restapi.events.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gng.restapi.events.model.Event;
+
 /**
- * Event controller webMvc Å×½ºÆ®
+ * Event controller webMvc í…ŒìŠ¤íŠ¸
  * @author gchyoo
  *
  */
-@ExtendWith(MockitoExtension.class)
+@TestPropertySource(locations = "classpath:/application-test.yml") // í…ŒìŠ¤íŠ¸ í”„ë¡œí¼í‹° íŒŒì¼ ì§€ì •
 @WebMvcTest
+@AutoConfigureMockMvc(addFilters = false) // Spring security filter ë¹„í™œì„±í™”
+@ExtendWith(MockitoExtension.class)
+@DisplayName("EventController í…ŒìŠ¤íŠ¸")
 public class EventControllerTest {
 	
-	// ¿äÃ»À» À§ÇÑ MockMvc °´Ã¼
-	// DispatcherServletÀ» Æ÷ÇÔÇÏ°í, SprinbootTestº¸´Ù ¼Óµµ°¡ ºü¸£Áö¸¸ ´ÜÀ§Å×½ºÆ®º¸´Ù ´À¸²
+	// ìš”ì²­ì„ ìœ„í•œ MockMvc ê°ì²´
+	// DispatcherServletì„ í¬í•¨í•˜ê³ , SprinbootTestë³´ë‹¤ ì†ë„ê°€ ë¹ ë¥´ì§€ë§Œ ë‹¨ìœ„í…ŒìŠ¤íŠ¸ë³´ë‹¤ ëŠë¦¼
 	@Autowired
 	private MockMvc mockMvc;
 	
+	// JSON string ì¶œë ¥ì„ ìœ„í•œ ObjectMapper ì˜ì¡´ì„± ì£¼ì…
+	@Autowired
+	ObjectMapper objectMapper;
+	
 	@Test
+	@DisplayName("ì´ë²¤íŠ¸ ë“±ë¡ í…ŒìŠ¤íŠ¸")
 	public void createEvent() throws Exception {
-		mockMvc.perform(post("/api/events/") // ¿äÃ» URI
-						.contentType(MediaType.APPLICATION_JSON) // Content type
-						.accept(MediaTypes.HAL_JSON) // Hypertext Application Language¿¡ ÁØÇÏ´Â ¿äÃ»
+		// ìš”ì²­ì„ ìœ„í•œ Event ê°ì²´ ìƒì„±
+		Event event = Event.builder()
+				.name("Spring")
+				.description("Spring REST API with TDD")
+				.beginEnrollmentDateTime(LocalDateTime.of(2018,  11, 23, 14, 21))
+				.closeEnrollmentDateTime(LocalDateTime.of(2018,  11, 24, 14, 21))
+				.beginEventDateTime(LocalDateTime.of(2018,  11, 25, 14, 21))
+				.endEventDateTime(LocalDateTime.of(2018,  11, 26, 14, 21))
+				.basePrice(100)
+				.maxPrice(200)
+				.limitOfEnrollment(100)
+				.location("ê°•ë‚¨ì—­")
+				.build();
+		
+		mockMvc.perform(post("/api/events/") // ìš”ì²­ URI
+						.contentType(MediaType.APPLICATION_JSON) // ì»¨í…ì¸  í˜•ì‹ ì„¤ì •
+						.characterEncoding(StandardCharsets.UTF_8) // ë¬¸ìì—´ í¬ë§· ì„¤ì •
+						.accept(MediaTypes.HAL_JSON) // Hypertext Application Languageì— ì¤€í•˜ëŠ” ìš”ì²­
+						.content(objectMapper.writeValueAsString(event))
 				)
-				.andExpect(status().isCreated()); // ÀÀ´äÀÌ 201 CREATEDÀÎÁö È®ÀÎ
+				.andDo(print()) // ìš”ì²­ê³¼ ì‘ë‹µì„ ì¶œë ¥
+				.andExpect(status().isCreated()) // ì‘ë‹µì´ 201 CREATEDì¸ì§€ í™•ì¸
+				.andExpect(jsonPath("id").exists()); // JSONì— IDê°€ ìˆëŠ”ì§€ í™•ì¸
 	}
 }

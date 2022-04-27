@@ -13,10 +13,10 @@ import lombok.ToString;
 
 /*
  * 
- * Lombok ¾î³ëÅ×ÀÌ¼ÇÀº Meta ¾î³ëÅ×ÀÌ¼Ç¿¡ Ãß°¡ÇÒ ¼ö ¾øÀ¸¹Ç·Î Á÷Á¢ ÀÛ¼ºÇØÁÖ¾î¾ß ÇÔ
- * ¶ÇÇÑ, @Data ¾î³ëÅ×ÀÌ¼ÇÀ» Entity¿¡ »ç¿ëÇÒ °æ¿ì
- * ÇØ´ç ¾î³ëÅ×ÀÌ¼Ç¿¡ @EqualsAndHashCode°¡ Æ÷ÇÔµÇ¾î ÀÖ±â ¶§¹®¿¡
- * StackOverflow°¡ ¹ß»ıÇÒ ¼ö ÀÖÀ¸¹Ç·Î ±ÇÀåÇÏÁö ¾ÊÀ½
+ * Lombok ì–´ë…¸í…Œì´ì…˜ì€ Meta ì–´ë…¸í…Œì´ì…˜ì— ì¶”ê°€í•  ìˆ˜ ì—†ìœ¼ë¯€ë¡œ ì§ì ‘ ì‘ì„±í•´ì£¼ì–´ì•¼ í•¨
+ * ë˜í•œ, @Data ì–´ë…¸í…Œì´ì…˜ì„ Entityì— ì‚¬ìš©í•  ê²½ìš°
+ * í•´ë‹¹ ì–´ë…¸í…Œì´ì…˜ì— @EqualsAndHashCodeê°€ í¬í•¨ë˜ì–´ ìˆê¸° ë•Œë¬¸ì—
+ * StackOverflowê°€ ë°œìƒí•  ìˆ˜ ìˆìœ¼ë¯€ë¡œ ê¶Œì¥í•˜ì§€ ì•ŠìŒ
 */
 @Getter
 @Setter
@@ -24,15 +24,15 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-// equals¸¦ »ç¿ëÇÏ¿© ºñ±³ÇÒ ¶§, id ¸â¹öº¯¼öÀÇ °ªÀ» ÀÌ¿ëÇÏ¿© È®ÀÎ
-// ´Ù¸¥ Entity¸¦ ÂüÁ¶ÇÏ´Â ¸â¹öº¯¼ö¸¦ »ç¿ëÇÒ °æ¿ì StackOverflow°¡ ¹ß»ıÇÒ ¼ö ÀÖÀ¸¹Ç·Î ÁÖÀÇ
+// equalsë¥¼ ì‚¬ìš©í•˜ì—¬ ë¹„êµí•  ë•Œ, id ë©¤ë²„ë³€ìˆ˜ì˜ ê°’ì„ ì´ìš©í•˜ì—¬ í™•ì¸
+// ë‹¤ë¥¸ Entityë¥¼ ì°¸ì¡°í•˜ëŠ” ë©¤ë²„ë³€ìˆ˜ë¥¼ ì‚¬ìš©í•  ê²½ìš° StackOverflowê°€ ë°œìƒí•  ìˆ˜ ìˆìœ¼ë¯€ë¡œ ì£¼ì˜
 @EqualsAndHashCode(of = {"id"})
 public class Event {
 	
 	private Integer id;
 	private String name;
 	private String description;
-	@ApiParam(value = "ÁöÁ¤µÇÁö ¾ÊÀ» °æ¿ì ¿Â¶óÀÎ ¸ğÀÓ", required = false)
+	@ApiParam(value = "ì§€ì •ë˜ì§€ ì•Šì„ ê²½ìš° ì˜¨ë¼ì¸ ëª¨ì„", required = false)
 	private String location;
 	
 	private LocalDateTime beginEnrollmentDateTime;

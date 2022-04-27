@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * Event entity Å×½ºÆ®
+ * Event entity í…ŒìŠ¤íŠ¸
  * @author gchyoo
  *
  */
@@ -16,20 +16,20 @@ public class EventTest {
 	private final static String EVENT_DESCRIPTION = "REST API development with Spring";
 	
 	@Test
-	@DisplayName("Event °´Ã¼ Builder Å×½ºÆ®")
+	@DisplayName("Event ê°ì²´ Builder í…ŒìŠ¤íŠ¸")
 	void hasBuilder() {
-		// Event °´Ã¼ÀÇ Builder°¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎ
+		// Event ê°ì²´ì˜ Builderê°€ ì¡´ì¬í•˜ëŠ”ì§€ í™•ì¸
 		Event event = Event.builder()
 				.name(EVENT_NAME)
 				.description(EVENT_DESCRIPTION)
 				.build();
 		
-		// NullÀÌ ¾Æ´ÑÁö È®ÀÎ
+		// Nullì´ ì•„ë‹Œì§€ í™•ì¸
 		assertThat(event).isNotNull();
 	}
 	
 	@Test
-	@DisplayName("Event °´Ã¼ »ı¼ºÀÚ Å×½ºÆ®")
+	@DisplayName("Event ê°ì²´ ìƒì„±ì í…ŒìŠ¤íŠ¸")
 	void hasConstructor() {
 		// Given
 		Event event = new Event();
