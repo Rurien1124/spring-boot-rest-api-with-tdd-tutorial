@@ -6,7 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 /**
- * Event 테스트
+ * Event entity 테스트
  * @author gchyoo
  *
  */
