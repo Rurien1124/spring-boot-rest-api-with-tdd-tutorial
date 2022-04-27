@@ -1,15 +1,15 @@
 > # 스프링 부트 REST API TDD 연습 프로젝트
 
 - ## 목차
-- [1. REST API란 무엇인가?](#1-rest-api-------)
-- [1-1. REST API의 조건](#1-1-rest-api----)
-- [1-2. Uniform interface란?](#1-2-uniform-interface--)
-  * [리소스 식별(identification of resources)](#-------identification-of-resources-)
-  * [표현을 통한 리소스 처리(manipulation of resources through representations)](#--------------manipulation-of-resources-through-representations-)
-  * [자기 서술형 메시지(self-descriptive messages)](#-----------self-descriptive-messages-)
-  * [애플리케이션 상태 엔진으로서의 하이퍼미디어(**H**ypermedia **A**s **T**he **E**ngine **O**f **A**pplication **S**tate)](#--------------------------h--ypermedia---a--s---t--he---e--ngine---o--f---a--pplication---s--tate-)
+- [1. REST API란 무엇인가?](#1-rest-api란-무엇인가)
+  - [1-1. REST API의 조건](#1-1-rest-api의-조건)
+  - [1-2. Uniform interface란?](#1-2-uniform-interface란)
+    * [리소스 식별(identification of resources)](#리소스-식별identification-of-resources)
+    * [표현을 통한 리소스 처리(manipulation of resources through representations)](#표현을-통한-리소스-처리manipulation-of-resources-through-representations)
+    * [자기 서술형 메시지(self-descriptive messages)](#자기-서술형-메시지self-descriptive-messages)
+    * [애플리케이션 상태 엔진으로서의 하이퍼미디어(**H**ypermedia **A**s **T**he **E**ngine **O**f **A**pplication **S**tate)](#애플리케이션-상태-엔진으로서의-하이퍼미디어hypermedia-as-the-engine-of-application-state)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+> <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 - ## 1. REST API란 무엇인가?
   - **RE**presentational **S**tate **T**ransfer의 약자
