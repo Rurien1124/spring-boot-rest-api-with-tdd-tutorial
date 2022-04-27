@@ -92,12 +92,12 @@
   - ## 2-2. MockMvc
   ```
   mockMvc.perform(post("/api/events/") // 요청 URI
-              .contentType(MediaType.APPLICATION_JSON) // 컨텐츠 형식 설정
-              .characterEncoding(StandardCharsets.UTF_8) // 문자열 포맷 설정
-              .accept(MediaTypes.HAL_JSON) // Hypertext Application Language에 준하는 요청
-        			.content(objectMapper.writeValueAsString(event))
-				)
-				.andDo(print()) // 요청과 응답을 출력
-				.andExpect(status().isCreated()) // 응답이 201 CREATED인지 확인
-				.andExpect(jsonPath("id").exists()); // JSON에 ID가 있는지 확인
+		.contentType(MediaType.APPLICATION_JSON) // 컨텐츠 형식 설정
+		.characterEncoding(StandardCharsets.UTF_8) // 문자열 포맷 설정
+		.accept(MediaTypes.HAL_JSON) // Hypertext Application Language에 준하는 요청
+		.content(objectMapper.writeValueAsString(event))
+	)
+	.andDo(print()) // 요청과 응답을 출력
+	.andExpect(status().isCreated()) // 응답이 201 CREATED인지 확인
+	.andExpect(jsonPath("id").exists()); // JSON에 ID가 있는지 확인
   ```
