@@ -1,5 +1,16 @@
 > # 스프링 부트 REST API TDD 연습 프로젝트
 
+- ## 목차
+  * [REST API란 무엇인가?](#rest-api-------)
+  * [REST API의 조건](#rest-api----)
+  * [Uniform interface란?](#uniform-interface--)
+    + [리소스 식별(identification of resources)](#-------identification-of-resources-)
+    + [표현을 통한 리소스 처리(manipulation of resources through representations)](#--------------manipulation-of-resources-through-representations-)
+    + [자기 서술형 메시지(self-descriptive messages)](#-----------self-descriptive-messages-)
+    + [애플리케이션 상태 엔진으로서의 하이퍼미디어(**H**ypermedia **A**s **T**he **E**ngine **O**f **A**pplication **S**tate)](#--------------------------h--ypermedia---a--s---t--he---e--ngine---o--f---a--pplication---s--tate-)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 - ## REST API란 무엇인가?
   - **RE**presentational **S**tate **T**ransfer의 약자
   - 시스템 각각(ex - frontend/backend)의 독립적인 진화를 보장
