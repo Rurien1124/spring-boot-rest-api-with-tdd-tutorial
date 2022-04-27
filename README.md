@@ -8,6 +8,9 @@
     * [표현을 통한 리소스 처리(manipulation of resources through representations)](#표현을-통한-리소스-처리manipulation-of-resources-through-representations)
     * [자기 서술형 메시지(self-descriptive messages)](#자기-서술형-메시지self-descriptive-messages)
     * [애플리케이션 상태 엔진으로서의 하이퍼미디어(**H**ypermedia **A**s **T**he **E**ngine **O**f **A**pplication **S**tate)](#애플리케이션-상태-엔진으로서의-하이퍼미디어hypermedia-as-the-engine-of-application-state)
+- [2. EventControllerTest](#2-eventcontrollertest)
+  - [2-1. Class annotations](#2-1-class-annotations)
+  - [2-2. MockMvc](#2-2-mockmvc)
 
 > <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -77,3 +80,24 @@
     {"id": 2}
     ```
   
+- ## 2. EventControllerTest
+  - ## 2-1. Class annotations
+  ```
+  @TestPropertySource(locations = "classpath:/application-test.yml") // 테스트 프로퍼티 파일 지정
+  @WebMvcTest // MockMvc 사용을 위해 설정
+  @AutoConfigureMockMvc(addFilters = false) // Spring security filter 비활성화
+  @ExtendWith(MockitoExtension.class)
+  ```
+  
+  - ## 2-2. MockMvc
+  ```
+  mockMvc.perform(post("/api/events/") // 요청 URI
+              .contentType(MediaType.APPLICATION_JSON) // 컨텐츠 형식 설정
+              .characterEncoding(StandardCharsets.UTF_8) // 문자열 포맷 설정
+              .accept(MediaTypes.HAL_JSON) // Hypertext Application Language에 준하는 요청
+        			.content(objectMapper.writeValueAsString(event))
+				)
+				.andDo(print()) // 요청과 응답을 출력
+				.andExpect(status().isCreated()) // 응답이 201 CREATED인지 확인
+				.andExpect(jsonPath("id").exists()); // JSON에 ID가 있는지 확인
+  ```
