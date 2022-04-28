@@ -52,6 +52,7 @@ public class EventController {
 		
 		// EventDto 객체 안의 데이터를 Event.class의 형태로 변환
 		Event event = modelMapper.map(eventDto, Event.class);
+		event.update();
 		
 		// Save event
 		Event newEvent = this.eventRepository.save(event);

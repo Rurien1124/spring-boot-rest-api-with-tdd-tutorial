@@ -60,4 +60,21 @@ public class Event {
 	// Enum이 변경될 경우 DB가 꼬일 수 있으므로 String으로 변경
 	@Enumerated(EnumType.STRING)
 	private EventStatus eventStatus;
+
+	/**
+	 * Update free/offline
+	 */
+	public void update() {
+		if(this.basePrice == 0 && this.maxPrice == 0) {
+			this.free = true;
+		} else {
+			this.free = false;
+		}
+		
+		if(this.location != null && !this.location.isBlank()) {
+			this.offline = true;
+		} else {
+			this.offline = false;
+		}
+	}
 }
