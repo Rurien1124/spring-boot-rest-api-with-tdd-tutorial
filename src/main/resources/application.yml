@@ -1,1 +1,4 @@
-
+spring:
+  jackson:
+    deserialization: 
+      fail-on-unknown-properties: true # 요청 시 알 수 없는 property가 오게 되면 실패

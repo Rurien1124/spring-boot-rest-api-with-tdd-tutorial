@@ -2,7 +2,10 @@ package com.gng.restapi.events.controller;
 
 import java.net.URI;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
+import org.modelmapper.internal.Errors;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
@@ -28,8 +31,13 @@ public class EventController {
 	
 	@PostMapping(value = "/events", produces = {MediaTypes.HAL_JSON_VALUE})
 	public ResponseEntity<Event> createEvent(
-			@RequestBody(required = true) EventDto eventDto
+			@Valid @RequestBody(required = true) EventDto eventDto,
+			Errors errors
 			) {
+		// Validation 실패 시 bad request 반환
+		if(errors.hasErrors()) {
+			return ResponseEntity.badRequest().build();
+		}
 		
 		// EventDto 객체 안의 데이터를 Event.class의 형태로 변환
 		Event event = modelMapper.map(eventDto, Event.class);
