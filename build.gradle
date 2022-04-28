@@ -19,9 +19,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	
 	// Spring security
-	implementation 'org.springframework.security:spring-security-core:5.6.2'
-	implementation 'org.springframework.security:spring-security-web:5.6.2'
-	implementation 'org.springframework.security:spring-security-config:5.6.2'
+	// implementation 'org.springframework.security:spring-security-core:5.6.2'
+	// implementation 'org.springframework.security:spring-security-web:5.6.2'
+	// implementation 'org.springframework.security:spring-security-config:5.6.2'
 	
 	// Spring HATEOAS
 	implementation 'org.springframework.hateoas:spring-hateoas:1.4.2'

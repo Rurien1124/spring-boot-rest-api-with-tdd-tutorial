@@ -2,6 +2,13 @@ package com.gng.restapi.events.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +34,13 @@ import lombok.ToString;
 // equals를 사용하여 비교할 때, id 멤버변수의 값을 이용하여 확인
 // 다른 Entity를 참조하는 멤버변수를 사용할 경우 StackOverflow가 발생할 수 있으므로 주의
 @EqualsAndHashCode(of = {"id"})
+@Entity
 public class Event {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
 	private String name;
 	private String description;
 	@ApiParam(value = "지정되지 않을 경우 온라인 모임", required = false)
@@ -48,5 +59,9 @@ public class Event {
 	
 	private boolean offline;
 	private boolean free;
+	
+	// Enum의 기본 저장방식은 숫자이기 때문에
+	// Enum이 변경될 경우 DB가 꼬일 수 있으므로 String으로 변경
+	@Enumerated(EnumType.STRING)
 	private EventStatus eventStatus;
 }

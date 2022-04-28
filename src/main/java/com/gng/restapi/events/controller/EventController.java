@@ -11,22 +11,32 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gng.restapi.events.model.Event;
+import com.gng.restapi.events.repository.EventRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RequestMapping("/api")
 @Controller
 public class EventController {
 	
+	private final EventRepository eventRepository;
+	
 	@PostMapping(value = "/events", produces = {MediaTypes.HAL_JSON_VALUE})
-	public ResponseEntity createEvent(
+	public ResponseEntity<Event> createEvent(
 			@RequestBody(required = true) Event event
 			) {
 		
+		// Save event
+		Event newEvent = this.eventRepository.save(event);
+		
 		// ControllerLinkBuilder was deprecated
+		// Create link
 		URI createdUri = WebMvcLinkBuilder.linkTo(EventController.class)
-				.slash("{id}")
+				.slash(newEvent.getId())
 				.toUri();
 		
 		return ResponseEntity.created(createdUri)
-				.body(event);
+				.body(newEvent);
 	}
 }

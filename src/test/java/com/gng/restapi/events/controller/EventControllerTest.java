@@ -2,6 +2,7 @@ package com.gng.restapi.events.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -11,10 +12,12 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
@@ -22,6 +25,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gng.restapi.events.model.Event;
+import com.gng.restapi.events.repository.EventRepository;
+import com.google.common.net.HttpHeaders;
 
 /**
  * Event controller webMvc 테스트
@@ -42,13 +47,17 @@ public class EventControllerTest {
 	
 	// JSON string 출력을 위한 ObjectMapper 의존성 주입
 	@Autowired
-	ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
+	
+	@MockBean
+	private EventRepository eventRepository;
 	
 	@Test
 	@DisplayName("이벤트 등록 테스트")
 	public void createEvent() throws Exception {
 		// 요청을 위한 Event 객체 생성
 		Event event = Event.builder()
+				.id(1)
 				.name("Spring")
 				.description("Spring REST API with TDD")
 				.beginEnrollmentDateTime(LocalDateTime.of(2018,  11, 23, 14, 21))
@@ -61,6 +70,10 @@ public class EventControllerTest {
 				.location("강남역")
 				.build();
 		
+		// Stubbing
+		BDDMockito.given(eventRepository.save(event))
+				.willReturn(event);
+		
 		mockMvc.perform(post("/api/events/") // 요청 URI
 						.contentType(MediaType.APPLICATION_JSON) // 컨텐츠 형식 설정
 						.characterEncoding(StandardCharsets.UTF_8) // 문자열 포맷 설정
@@ -69,6 +82,8 @@ public class EventControllerTest {
 				)
 				.andDo(print()) // 요청과 응답을 출력
 				.andExpect(status().isCreated()) // 응답이 201 CREATED인지 확인
-				.andExpect(jsonPath("id").exists()); // JSON에 ID가 있는지 확인
+				.andExpect(jsonPath("id").exists()) // JSON에 ID가 있는지 확인
+				.andExpect(header().exists(HttpHeaders.LOCATION)) // Location 헤더 확인
+				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE)); // Content-Type 헤더 확인
 	}
 }
