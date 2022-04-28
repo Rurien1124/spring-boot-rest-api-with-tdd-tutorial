@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.gng.restapi.commons.common.ErrorsSerializer;
 import com.gng.restapi.events.model.Event;
 import com.gng.restapi.events.model.EventDto;
 import com.gng.restapi.events.model.EventValidator;
@@ -33,18 +34,20 @@ public class EventController {
 	private final ModelMapper modelMapper;
 	
 	@PostMapping(value = "/events", produces = {MediaTypes.HAL_JSON_VALUE})
-	public ResponseEntity<Event> createEvent(
+	public ResponseEntity createEvent(
 			@Valid @RequestBody(required = true) EventDto eventDto,
 			Errors errors
 			) {
 		// Validation 실패 시 bad request 반환
 		if(errors.hasErrors()) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest()
+					.body(errors);
 		}
 		
 		eventValidator.validate(eventDto, errors);
 		if(errors.hasErrors()) {
-			return ResponseEntity.badRequest().build();
+			return ResponseEntity.badRequest()
+					.body(errors);
 		}
 		
 		// EventDto 객체 안의 데이터를 Event.class의 형태로 변환
