@@ -66,9 +66,9 @@ public class EventControllerTest {
 				.build();
 		
 		mockMvc.perform(post("/api/events/") // 요청 URI
-						.contentType(MediaType.APPLICATION_JSON) // 컨텐츠 형식 설정
-						.characterEncoding(StandardCharsets.UTF_8) // 문자열 포맷 설정
 						.accept(MediaTypes.HAL_JSON) // Hypertext Application Language에 준하는 요청
+						.characterEncoding(StandardCharsets.UTF_8) // 문자열 포맷 설정
+						.contentType(MediaType.APPLICATION_JSON) // 컨텐츠 형식 설정
 						.content(objectMapper.writeValueAsString(eventDto))
 				)
 				.andDo(print()) // 요청과 응답을 출력
@@ -81,8 +81,8 @@ public class EventControllerTest {
 	}
 	
 	@Test
-	@DisplayName("이벤트 등록 실패 테스트(Unkwnown property)")
-	public void createEventUnknownProperty() throws Exception {
+	@DisplayName("이벤트 등록 실패 테스트(Unkwnown property bad request)")
+	public void createEventUnknownBadRequest() throws Exception {
 		Event event = Event.builder()
 				.id(100)
 				.name("Spring")
@@ -101,26 +101,55 @@ public class EventControllerTest {
 		
 		mockMvc.perform(post("/api/events/")
 						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(event))
 						.characterEncoding(StandardCharsets.UTF_8)
 						.accept(MediaTypes.HAL_JSON)
-						.content(objectMapper.writeValueAsString(event))
 				)
 				.andDo(print())
 				// spring.jackson.deserialization.fail-on-unknown-properties를 통해 Unknown property에 대한 오류를 발생시킴
 				.andExpect(status().isBadRequest()); // 응답이 400 BAD_REQUEST인지 확인
 	}
-	
+
 	@Test
-	@DisplayName("이벤트 등록 실패 테스트(Bad request)")
-	public void createEventBadRequest() throws Exception {
+	@DisplayName("이벤트 등록 실패 테스트(Empty parameter bad request)")
+	public void createEventEmptyBadRequest() throws Exception {
 		
 		EventDto eventDto = EventDto.builder()
 				.build();
 		
 		mockMvc.perform(post("/api/events")
-						.contentType(MediaType.APPLICATION_JSON)
-						.characterEncoding(StandardCharsets.UTF_8)
 						.accept(MediaTypes.HAL_JSON)
+						.characterEncoding(StandardCharsets.UTF_8)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(objectMapper.writeValueAsString(eventDto))
+				)
+				.andDo(print())
+				.andExpect(status().isBadRequest());
+	}
+	
+
+	@Test
+	@DisplayName("이벤트 등록 실패 테스트(Wrong parameter bad request)")
+	public void createEventWrongBadRequest() throws Exception {
+
+		EventDto eventDto = EventDto.builder()
+				.name("Spring")
+				.description("Spring REST API with TDD")
+				.beginEnrollmentDateTime(LocalDateTime.of(2018,  11, 24, 14, 21))
+				.closeEnrollmentDateTime(LocalDateTime.of(2018,  11, 23, 14, 21))
+				.beginEventDateTime(LocalDateTime.of(2018,  11, 26, 14, 21))
+				.endEventDateTime(LocalDateTime.of(2018,  11, 25, 14, 21))
+				.basePrice(10000)
+				.maxPrice(200)
+				.limitOfEnrollment(100)
+				.location("강남역")
+				.build();
+		
+		
+		mockMvc.perform(post("/api/events")
+						.accept(MediaTypes.HAL_JSON)
+						.characterEncoding(StandardCharsets.UTF_8)
+						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(eventDto))
 				)
 				.andDo(print())

@@ -5,17 +5,18 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
-import org.modelmapper.internal.Errors;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gng.restapi.events.model.Event;
 import com.gng.restapi.events.model.EventDto;
+import com.gng.restapi.events.model.EventValidator;
 import com.gng.restapi.events.repository.EventRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,8 @@ public class EventController {
 	
 	private final EventRepository eventRepository;
 	
+	private final EventValidator eventValidator;
+	
 	private final ModelMapper modelMapper;
 	
 	@PostMapping(value = "/events", produces = {MediaTypes.HAL_JSON_VALUE})
@@ -35,6 +38,11 @@ public class EventController {
 			Errors errors
 			) {
 		// Validation 실패 시 bad request 반환
+		if(errors.hasErrors()) {
+			return ResponseEntity.badRequest().build();
+		}
+		
+		eventValidator.validate(eventDto, errors);
 		if(errors.hasErrors()) {
 			return ResponseEntity.badRequest().build();
 		}
