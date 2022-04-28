@@ -9,14 +9,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
@@ -34,7 +35,7 @@ import com.google.common.net.HttpHeaders;
  *
  */
 @TestPropertySource(locations = "classpath:/application-test.yml") // 테스트 프로퍼티 파일 지정
-@WebMvcTest
+@SpringBootTest // API 테스트 시에는 SpringBootTest 사용
 @AutoConfigureMockMvc(addFilters = false) // Spring security filter 비활성화
 @ExtendWith(MockitoExtension.class)
 @DisplayName("EventController 테스트")
@@ -49,15 +50,12 @@ public class EventControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 	
-	@MockBean
-	private EventRepository eventRepository;
-	
 	@Test
 	@DisplayName("이벤트 등록 테스트")
 	public void createEvent() throws Exception {
 		// 요청을 위한 Event 객체 생성
 		Event event = Event.builder()
-				.id(1)
+				.id(100)
 				.name("Spring")
 				.description("Spring REST API with TDD")
 				.beginEnrollmentDateTime(LocalDateTime.of(2018,  11, 23, 14, 21))
@@ -68,11 +66,9 @@ public class EventControllerTest {
 				.maxPrice(200)
 				.limitOfEnrollment(100)
 				.location("강남역")
+				.free(true)
+				.offline(false)
 				.build();
-		
-		// Stubbing
-		BDDMockito.given(eventRepository.save(event))
-				.willReturn(event);
 		
 		mockMvc.perform(post("/api/events/") // 요청 URI
 						.contentType(MediaType.APPLICATION_JSON) // 컨텐츠 형식 설정
@@ -83,6 +79,8 @@ public class EventControllerTest {
 				.andDo(print()) // 요청과 응답을 출력
 				.andExpect(status().isCreated()) // 응답이 201 CREATED인지 확인
 				.andExpect(jsonPath("id").exists()) // JSON에 ID가 있는지 확인
+				.andExpect(jsonPath("id").value(Matchers.not(100)))
+				.andExpect(jsonPath("free").value(Matchers.not(true)))
 				.andExpect(header().exists(HttpHeaders.LOCATION)) // Location 헤더 확인
 				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE)); // Content-Type 헤더 확인
 	}

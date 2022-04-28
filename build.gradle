@@ -64,6 +64,7 @@ dependencies {
 	
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot:3.0.4'
 	
+	implementation 'org.modelmapper:modelmapper:3.1.0'
 	
 	// Test
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'

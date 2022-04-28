@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -43,7 +42,6 @@ public class Event {
 	
 	private String name;
 	private String description;
-	@ApiParam(value = "지정되지 않을 경우 온라인 모임", required = false)
 	private String location;
 	
 	private LocalDateTime beginEnrollmentDateTime;
@@ -51,9 +49,7 @@ public class Event {
 	private LocalDateTime beginEventDateTime;
 	private LocalDateTime endEventDateTime;
 
-	@ApiParam(required = false)
 	private int basePrice;
-	@ApiParam(required = false)
 	private int maxPrice;
 	private int limitOfEnrollment;
 	
