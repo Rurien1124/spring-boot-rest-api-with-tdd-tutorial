@@ -66,7 +66,6 @@ public class EventController {
 		// Body를 event가 아닌 eventResource로 사용함으로써 링크를 추가할 수 있음
 		EventResource eventResource = new EventResource(newEvent);
 		
-		eventResource.add(selfLinkBuilder.withSelfRel());
 		eventResource.add(WebMvcLinkBuilder.linkTo(EventController.class).withRel("query-events"));
 		eventResource.add(WebMvcLinkBuilder.linkTo(EventController.class).withRel("update-event"));
 		
