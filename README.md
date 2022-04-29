@@ -18,6 +18,7 @@
   - [4-1. 링크 작성 기능](#4-1-링크-작성-기능)
   - [4-2. 리소스 생성 기능](#4-2-리소스-생성-기능)
   - [4-3. Relation(REL)](#4-3-relationrel)
+  - [4-4. Deprecated classes](#4-4-deprecated-classes)
 
 > <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -116,4 +117,8 @@
     - update : 업데이트를 위한 URL
     - query : 조회를 위한 URL
     - ...
-    
+  - ## 4-4. Deprecated classes
+    - ResourceSupport => RepresentationModel
+    - Resource => EntityModel
+    - Resources => CollectionModel
+    - PagedResources => PagedModel    
