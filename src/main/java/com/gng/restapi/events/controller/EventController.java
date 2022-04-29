@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.gng.restapi.commons.common.ErrorsSerializer;
 import com.gng.restapi.events.model.Event;
 import com.gng.restapi.events.model.EventDto;
+import com.gng.restapi.events.model.EventResource;
 import com.gng.restapi.events.model.EventValidator;
 import com.gng.restapi.events.repository.EventRepository;
 
@@ -59,11 +59,18 @@ public class EventController {
 		
 		// ControllerLinkBuilder was deprecated
 		// Create link
-		URI createdUri = WebMvcLinkBuilder.linkTo(EventController.class)
-				.slash(newEvent.getId())
-				.toUri();
+		WebMvcLinkBuilder selfLinkBuilder = WebMvcLinkBuilder.linkTo(EventController.class)
+				.slash(newEvent.getId());
+		URI createdUri = selfLinkBuilder.toUri();
+		
+		// Body를 event가 아닌 eventResource로 사용함으로써 링크를 추가할 수 있음
+		EventResource eventResource = new EventResource(newEvent);
+		
+		eventResource.add(selfLinkBuilder.withSelfRel());
+		eventResource.add(WebMvcLinkBuilder.linkTo(EventController.class).withRel("query-events"));
+		eventResource.add(WebMvcLinkBuilder.linkTo(EventController.class).withRel("update-event"));
 		
 		return ResponseEntity.created(createdUri)
-				.body(newEvent);
+				.body(eventResource);
 	}
 }

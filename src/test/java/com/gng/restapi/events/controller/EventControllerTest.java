@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,11 +72,14 @@ public class EventControllerTest {
 				)
 				.andDo(print()) // 요청과 응답을 출력
 				.andExpect(status().isCreated()) // 응답이 201 CREATED인지 확인
+				.andExpect(header().exists(HttpHeaders.LOCATION)) // Location 헤더 확인
+				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE)) // Content-Type 헤더 확인
 				.andExpect(jsonPath("id").exists()) // JSON에 ID가 있는지 확인
 				.andExpect(jsonPath("free").value(false)) // 가격이 있으므로 비즈니스 로직에서 false로 변경
 				.andExpect(jsonPath("offline").value(true)) // 장소가 지정되어 있으므로 비즈니스 로직에서 true로 변경
-				.andExpect(header().exists(HttpHeaders.LOCATION)) // Location 헤더 확인
-				.andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE)); // Content-Type 헤더 확인
+				.andExpect(jsonPath("_links.self").exists())
+				.andExpect(jsonPath("_links.query-events").exists())
+				.andExpect(jsonPath("_links.update-event").exists());
 	}
 	
 	@Test
