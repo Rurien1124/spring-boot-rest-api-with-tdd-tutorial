@@ -11,6 +11,9 @@
 - [2. EventControllerTest](#2-eventcontrollertest)
   - [2-1. Class annotations](#2-1-class-annotations)
   - [2-2. MockMvc](#2-2-mockmvc)
+- [3. EventController](#3-eventcontroller)
+  - [3-1. Validation](#3-1-validation)
+  - [3-2. ResponseEntity](#3-2-responseentity)
 
 > <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -82,22 +85,17 @@
   
 - ## 2. EventControllerTest
   - ## 2-1. Class annotations
-  ```
-  @TestPropertySource(locations = "classpath:/application-test.yml") // 테스트 프로퍼티 파일 지정
-  @WebMvcTest // MockMvc 사용을 위해 설정
-  @AutoConfigureMockMvc(addFilters = false) // Spring security filter 비활성화
-  @ExtendWith(MockitoExtension.class)
-  ```
+    - Controller 테스트의 경우 mocking 해야할 범위가 넓어지기 때문에, @SpringBootTest를 사용
   
   - ## 2-2. MockMvc
-  ```
-  mockMvc.perform(post("/api/events/") // 요청 URI
-		.contentType(MediaType.APPLICATION_JSON) // 컨텐츠 형식 설정
-		.characterEncoding(StandardCharsets.UTF_8) // 문자열 포맷 설정
-		.accept(MediaTypes.HAL_JSON) // Hypertext Application Language에 준하는 요청
-		.content(objectMapper.writeValueAsString(event))
-	)
-	.andDo(print()) // 요청과 응답을 출력
-	.andExpect(status().isCreated()) // 응답이 201 CREATED인지 확인
-	.andExpect(jsonPath("id").exists()); // JSON에 ID가 있는지 확인
-  ```
+    - Controller의 API를 테스트하기 위해 의존성을 주입하여 테스트
+    - andExpect(ResultMatcher)를 사용하여 header, json을 검증
+    
+- ## 3. EventController
+  - ## 3-1. Validation
+    - @Valid 어노테이션을 통한 validation
+    - @Valid 어노테이션에서 validation 할 수 없는 경우에는 별도의 클래스를 생성하여 validation
+    - 입력 시 불필요한 파라미터를 제한하기 위해 Entity를 Request에 직접 사용하지 않고, 별도로 DTO 클래스를 만들어 사용
+  - ## 3-2. ResponseEntity
+    - 응답 HttpStatus를 지정할 수 있음(.badRequest(), .ok() 등)
+    - 응답 Body를 지정할 수 있음(JSON 형태 응답의 경우 serialization을 해주어야 함)
