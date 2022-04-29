@@ -14,6 +14,10 @@
 - [3. EventController](#3-eventcontroller)
   - [3-1. Validation](#3-1-validation)
   - [3-2. ResponseEntity](#3-2-responseentity)
+- [4. Spring HATEOAS 기능](#4-spring-hateoas-기능)
+  - [4-1. 링크 작성 기능](#4-1-링크-작성-기능)
+  - [4-2. 리소스 생성 기능](#4-2-리소스-생성-기능)
+  - [4-3. Relation(REL)](#4-3-relationrel)
 
 > <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -99,3 +103,17 @@
   - ## 3-2. ResponseEntity
     - 응답 HttpStatus를 지정할 수 있음(.badRequest(), .ok() 등)
     - 응답 Body를 지정할 수 있음(JSON 형태 응답의 경우 serialization을 해주어야 함)
+
+- ## 4. Spring HATEOAS 기능
+  - ## 4-1. 링크 작성 기능
+    - 문자열로 링크 생성
+    - 컨트롤러와 메서드로 링크 생성
+  - ## 4-2. 리소스 생성 기능
+    - 리소스 : 데이터 + 링크
+  - ## 4-3. Relation(REL)
+    - self : 자기 자신에 대한 URL
+    - profile : 현재 응답에 대해 설명된 문서
+    - update : 업데이트를 위한 URL
+    - query : 조회를 위한 URL
+    - ...
+    
