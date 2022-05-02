@@ -8,6 +8,7 @@
     * [표현을 통한 리소스 처리(manipulation of resources through representations)](#표현을-통한-리소스-처리manipulation-of-resources-through-representations)
     * [자기 서술형 메시지(self-descriptive messages)](#자기-서술형-메시지self-descriptive-messages)
     * [애플리케이션 상태 엔진으로서의 하이퍼미디어(**H**ypermedia **A**s **T**he **E**ngine **O**f **A**pplication **S**tate)](#애플리케이션-상태-엔진으로서의-하이퍼미디어hypermedia-as-the-engine-of-application-state)
+  - [1-3. HTTP methods](#1-3-http-methods)
 - [2. ControllerTest](#2-controllertest)
   - [2-1. Class annotations](#2-1-class-annotations)
   - [2-2. MockMvc](#2-2-mockmvc)
@@ -88,6 +89,16 @@
     Link: </user/1>; rel="previous", </user/3>; rel="previous";
     {"id": 2}
     ```
+  
+  - ## 1-3. HTTP methods
+    - GET     : 데이터 조회(CRUD의 **R**etrieve)
+    - POST    : 데이터 생성(CRUD의 **C**reate)
+    - PUT     : 데이터 **전체** 수정, 없으면 생성(CRUD의 **U**pdate + **C**reate)
+    - PATCH   : 데이터 **일부** 수정(CRUD의 **U**pdate)
+    - DELETE  : 데이터 삭제(CRUD의 **D**elete)
+    - HEAD    : 응답 헤더 확인(GET에서 Body를 제외한 응답 헤더만 응답으로 받음)
+    - OPTIONS : 지원하는 요청 확인(지원하는 HTTP 메서드 타입을 응답으로 받음)
+    - TRACE   : 웹 서버까지의 네트워크 경로 확인(Web proxy, Web cache 서버의 요청 메시지를 응답으로 받음)
   
 - ## 2. ControllerTest
   - ## 2-1. Class annotations
