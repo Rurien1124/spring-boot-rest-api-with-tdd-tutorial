@@ -32,7 +32,7 @@ import com.gng.restapi.events.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/events")
 @Controller
 public class EventController {
 	
@@ -42,7 +42,7 @@ public class EventController {
 	
 	private final ModelMapper modelMapper;
 	
-	@PostMapping(value = "/events", produces = {MediaTypes.HAL_JSON_VALUE})
+	@PostMapping(produces = {MediaTypes.HAL_JSON_VALUE})
 	public ResponseEntity createEvent(
 			@Valid @RequestBody(required = true) EventDto eventDto,
 			Errors errors
@@ -82,7 +82,7 @@ public class EventController {
 				.body(eventEntityModel);
 	}
 	
-	@GetMapping("/events")
+	@GetMapping
 	public ResponseEntity queryEvents(
 			Pageable pageable, // 페이징을 위한 파라미터
 			PagedResourcesAssembler<Event> pageAssembler // 페이징 정보를 위한 파라미터
@@ -98,7 +98,7 @@ public class EventController {
 				.body(pagedModel);
 	}
 	
-	@GetMapping("/events/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity queryEvent(
 			@PathVariable Integer id
 			) {
@@ -116,7 +116,7 @@ public class EventController {
 				.body(eventEntityModel);
 	}
 	
-	@PatchMapping("/events/{id}")
+	@PatchMapping("/{id}")
 	public ResponseEntity updateEvent(
 			@PathVariable Integer id,
 			@RequestBody @Valid EventDto eventDto,
