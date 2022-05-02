@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.gng.restapi.events.model.Event;
 import com.gng.restapi.events.model.EventDto;
-import com.gng.restapi.events.model.EventResource;
+import com.gng.restapi.events.model.EventEntityModel;
 import com.gng.restapi.events.model.EventValidator;
 import com.gng.restapi.events.repository.EventRepository;
 
@@ -72,14 +72,14 @@ public class EventController {
 				.slash(newEvent.getId());
 		URI createdUri = selfLinkBuilder.toUri();
 		
-		// Body를 event가 아닌 eventResource로 사용함으로써 링크를 추가할 수 있음
-		EventResource eventResource = new EventResource(newEvent);
+		// Body를 event가 아닌 eventEntityModel로 사용함으로써 링크를 추가할 수 있음
+		EventEntityModel eventEntityModel = new EventEntityModel(newEvent);
 		
-		eventResource.add(WebMvcLinkBuilder.linkTo(EventController.class).withRel("query-events"));
-		eventResource.add(WebMvcLinkBuilder.linkTo(EventController.class).withRel("update-event"));
+		eventEntityModel.add(WebMvcLinkBuilder.linkTo(EventController.class).withRel("query-events"));
+		eventEntityModel.add(WebMvcLinkBuilder.linkTo(EventController.class).withRel("update-event"));
 		
 		return ResponseEntity.created(createdUri)
-				.body(eventResource);
+				.body(eventEntityModel);
 	}
 	
 	@GetMapping("/events")
@@ -92,7 +92,7 @@ public class EventController {
 		
 		// toResource was deprecated, use toModel
 		// page informations
-		PagedModel<EntityModel<Event>> pagedModel = pageAssembler.toModel(pages, event -> new EventResource(event));
+		PagedModel<EntityModel<Event>> pagedModel = pageAssembler.toModel(pages, event -> new EventEntityModel(event));
 		
 		return ResponseEntity.ok()
 				.body(pagedModel);
@@ -110,10 +110,10 @@ public class EventController {
 		}
 		
 		Event event = optionalEvent.get();
-		EventResource eventResource = new EventResource(event);
+		EventEntityModel eventEntityModel = new EventEntityModel(event);
 		
 		return ResponseEntity.ok()
-				.body(eventResource);
+				.body(eventEntityModel);
 	}
 	
 	@PatchMapping("/events/{id}")
@@ -146,9 +146,9 @@ public class EventController {
 		
 		Event savedEvent = this.eventRepository.save(prevEvent);
 		
-		EventResource eventResource = new EventResource(savedEvent);
+		EventEntityModel eventEntityModel = new EventEntityModel(savedEvent);
 		
 		return ResponseEntity.ok()
-				.body(eventResource);
+				.body(eventEntityModel);
 	}
 }
