@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -35,6 +36,7 @@ import com.google.common.net.HttpHeaders;
 @SpringBootTest // API 테스트 시에는 SpringBootTest 사용
 @AutoConfigureMockMvc(addFilters = false) // Spring security filter 비활성화
 @ExtendWith(MockitoExtension.class)
+@ActiveProfiles(profiles = "test") // 테스트용 프로필로 설정
 @DisplayName("EventController 테스트")
 public class EventControllerTest {
 	
@@ -64,7 +66,7 @@ public class EventControllerTest {
 				.location("강남역")
 				.build();
 		
-		mockMvc.perform(post("/api/events/") // 요청 URI
+		mockMvc.perform(post("/api/events") // 요청 URI
 						.accept(MediaTypes.HAL_JSON) // Hypertext Application Language에 준하는 요청
 						.characterEncoding(StandardCharsets.UTF_8) // 문자열 포맷 설정
 						.contentType(MediaType.APPLICATION_JSON) // 컨텐츠 형식 설정

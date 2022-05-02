@@ -45,7 +45,7 @@ dependencies {
 	
 	// Database
 	runtimeOnly 'mysql:mysql-connector-java'
-	runtimeOnly 'com.h2database:h2'
+	testImplementation 'com.h2database:h2'
 	
 	
 	// JPA
