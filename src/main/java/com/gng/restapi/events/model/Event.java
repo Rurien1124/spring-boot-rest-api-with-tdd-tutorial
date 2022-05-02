@@ -37,6 +37,7 @@ import lombok.ToString;
 public class Event {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	private String name;
