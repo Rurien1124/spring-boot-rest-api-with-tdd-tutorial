@@ -1,8 +1,8 @@
 package com.gng.restapi.events.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -258,8 +258,11 @@ public class EventControllerTest {
 			eventDto.setName("Updated event");
 			
 			// When
-			mockMvc.perform(put("/api/events/{id}", event.getId())
+			mockMvc.perform(patch("/api/events/{id}", event.getId())
 							.content(objectMapper.writeValueAsString(eventDto))
+							.accept(MediaTypes.HAL_JSON)
+							.characterEncoding(StandardCharsets.UTF_8)
+							.contentType(MediaType.APPLICATION_JSON)
 					)
 			
 			// Then
@@ -279,8 +282,11 @@ public class EventControllerTest {
 			EventDto eventDto = new EventDto();
 			
 			// When
-			mockMvc.perform(put("/api/events/{id}", event.getId())
+			mockMvc.perform(patch("/api/events/{id}", event.getId())
 							.content(objectMapper.writeValueAsString(eventDto))
+							.accept(MediaTypes.HAL_JSON)
+							.characterEncoding(StandardCharsets.UTF_8)
+							.contentType(MediaType.APPLICATION_JSON)
 					)
 			
 			// Then
@@ -300,8 +306,11 @@ public class EventControllerTest {
 			eventDto.setMaxPrice(1000);
 			
 			// When
-			mockMvc.perform(put("/api/events/{id}", event.getId())
+			mockMvc.perform(patch("/api/events/{id}", event.getId())
 							.content(objectMapper.writeValueAsString(eventDto))
+							.accept(MediaTypes.HAL_JSON)
+							.characterEncoding(StandardCharsets.UTF_8)
+							.contentType(MediaType.APPLICATION_JSON)
 					)
 			
 			// Then
@@ -319,8 +328,11 @@ public class EventControllerTest {
 			EventDto eventDto = modelMapper.map(event, EventDto.class);
 			
 			// When
-			mockMvc.perform(put("/api/events/2222")
+			mockMvc.perform(patch("/api/events/2222")
 							.content(objectMapper.writeValueAsString(eventDto))
+							.accept(MediaTypes.HAL_JSON)
+							.characterEncoding(StandardCharsets.UTF_8)
+							.contentType(MediaType.APPLICATION_JSON)
 					)
 			
 			// Then
@@ -332,7 +344,7 @@ public class EventControllerTest {
 	
 	private Event generateEvent(int index) {
 		Event event = Event.builder()
-				.id(100)
+				.id(index)
 				.name("Spring")
 				.description("Spring REST API with TDD")
 				.beginEnrollmentDateTime(LocalDateTime.of(2018,  11, 23, 14, 21))

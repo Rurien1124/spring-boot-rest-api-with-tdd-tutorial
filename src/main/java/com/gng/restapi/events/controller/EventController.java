@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -110,6 +111,42 @@ public class EventController {
 		
 		Event event = optionalEvent.get();
 		EventResource eventResource = new EventResource(event);
+		
+		return ResponseEntity.ok()
+				.body(eventResource);
+	}
+	
+	@PatchMapping("/events/{id}")
+	public ResponseEntity updateEvent(
+			@PathVariable Integer id,
+			@RequestBody @Valid EventDto eventDto,
+			Errors errors
+			) {
+		Optional<Event> optionalEvent = this.eventRepository.findById(id);
+		
+		if(optionalEvent.isEmpty()) {
+			return ResponseEntity.notFound()
+					.build();
+		}
+
+		// Validation 실패 시 bad request 반환
+		if(errors.hasErrors()) {
+			return ResponseEntity.badRequest()
+					.body(errors);
+		}
+		
+		eventValidator.validate(eventDto, errors);
+		if(errors.hasErrors()) {
+			return ResponseEntity.badRequest()
+					.body(errors);
+		}
+		
+		Event prevEvent = optionalEvent.get();
+		this.modelMapper.map(eventDto, prevEvent);
+		
+		Event savedEvent = this.eventRepository.save(prevEvent);
+		
+		EventResource eventResource = new EventResource(savedEvent);
 		
 		return ResponseEntity.ok()
 				.body(eventResource);

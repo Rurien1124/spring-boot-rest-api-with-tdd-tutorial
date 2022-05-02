@@ -39,7 +39,7 @@ spring:
       # update : 변경분만 반영
       # validate : 엔티티와 테이블 정상 매핑만 확인
       # none : 사용하지 않음
-      ddl-auto: validate
+      ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   output:
