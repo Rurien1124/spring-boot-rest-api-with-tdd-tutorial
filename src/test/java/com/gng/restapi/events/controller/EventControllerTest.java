@@ -1,5 +1,6 @@
 package com.gng.restapi.events.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -8,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,6 +27,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gng.restapi.events.model.Event;
 import com.gng.restapi.events.model.EventDto;
+import com.gng.restapi.events.repository.EventRepository;
 import com.google.common.net.HttpHeaders;
 
 /**
@@ -48,6 +51,9 @@ public class EventControllerTest {
 	// JSON string 출력을 위한 ObjectMapper 의존성 주입
 	@Autowired
 	private ObjectMapper objectMapper;
+	
+	@Autowired
+	private EventRepository eventRepository;
 	
 	@Test
 	@DisplayName("이벤트 등록 성공 테스트")
@@ -161,6 +167,74 @@ public class EventControllerTest {
 				// 오류 응답 json 확인
 				.andExpect(jsonPath("[0].objectName").exists())
 				.andExpect(jsonPath("[0].defaultMessage").exists())
-				.andExpect(jsonPath("[0].rejectedValue").exists());
+				.andExpect(jsonPath("[0].rejectedValue").exists())
+				;
+	}
+	
+	@Test
+	@DisplayName("30개의 이벤트를 10개씩 두번째 페이지 조회하기")
+	void queryEvents() throws Exception {
+		// Given
+		IntStream.range(0, 30)
+				.forEach(this::generateEvent);
+		
+		// When
+		this.mockMvc.perform(get("/api/events")
+						.param("page", "1")
+						.param("size", "10")
+						.param("sort", "name,DESC")
+				)
+		
+		// Then
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("page").exists())
+				.andExpect(jsonPath("_embedded.eventList[0]._links.self").exists())
+				.andExpect(jsonPath("_links.self").exists())
+				;
+	}
+
+	@Test
+	@DisplayName("기존의 이벤트 하나를 조회")
+	void queryEventOk() throws Exception {
+		// Given
+		Event event = this.generateEvent(100);
+		
+		// When
+		this.mockMvc.perform(get("/api/events/{id}", event.getId()))
+				
+		// Then
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("name").exists())
+				.andExpect(jsonPath("id").exists())
+				.andExpect(jsonPath("_links.self").exists())
+				;
+	}
+	
+	@Test
+	@DisplayName("없는 이벤트를 조회")
+	void queryEventNotFound() throws Exception {
+		// Given
+		this.generateEvent(100);
+		
+		// When
+		this.mockMvc.perform(get("/api/events/{id}", 1000))
+				
+		// Then
+				.andDo(print())
+				.andExpect(status().isNotFound())
+				;
+	}
+	
+	private Event generateEvent(int index) {
+		Event event = Event.builder()
+				.name("event_" + index)
+				.description("test event_" + index)
+				.build();
+		
+		this.eventRepository.save(event);
+		
+		return event;
 	}
 }

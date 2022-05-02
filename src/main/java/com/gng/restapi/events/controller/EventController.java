@@ -1,15 +1,23 @@
 package com.gng.restapi.events.controller;
 
 import java.net.URI;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,6 +78,40 @@ public class EventController {
 		eventResource.add(WebMvcLinkBuilder.linkTo(EventController.class).withRel("update-event"));
 		
 		return ResponseEntity.created(createdUri)
+				.body(eventResource);
+	}
+	
+	@GetMapping("/events")
+	public ResponseEntity queryEvents(
+			Pageable pageable, // 페이징을 위한 파라미터
+			PagedResourcesAssembler<Event> pageAssembler // 페이징 정보를 위한 파라미터
+			) {
+		
+		Page<Event> pages = this.eventRepository.findAll(pageable);
+		
+		// toResource was deprecated, use toModel
+		// page informations
+		PagedModel<EntityModel<Event>> pagedModel = pageAssembler.toModel(pages, event -> new EventResource(event));
+		
+		return ResponseEntity.ok()
+				.body(pagedModel);
+	}
+	
+	@GetMapping("/events/{id}")
+	public ResponseEntity queryEvent(
+			@PathVariable Integer id
+			) {
+		Optional<Event> optionalEvent = this.eventRepository.findById(id);
+		
+		if(optionalEvent.isEmpty()) {
+			return ResponseEntity.notFound()
+					.build();
+		}
+		
+		Event event = optionalEvent.get();
+		EventResource eventResource = new EventResource(event);
+		
+		return ResponseEntity.ok()
 				.body(eventResource);
 	}
 }
