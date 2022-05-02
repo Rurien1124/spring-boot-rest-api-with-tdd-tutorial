@@ -4,14 +4,11 @@
 - [1. REST API란 무엇인가?](#1-rest-api란-무엇인가)
   - [1-1. REST API의 조건](#1-1-rest-api의-조건)
   - [1-2. Uniform interface란?](#1-2-uniform-interface란)
-    * [리소스 식별(identification of resources)](#리소스-식별identification-of-resources)
-    * [표현을 통한 리소스 처리(manipulation of resources through representations)](#표현을-통한-리소스-처리manipulation-of-resources-through-representations)
-    * [자기 서술형 메시지(self-descriptive messages)](#자기-서술형-메시지self-descriptive-messages)
-    * [애플리케이션 상태 엔진으로서의 하이퍼미디어(**H**ypermedia **A**s **T**he **E**ngine **O**f **A**pplication **S**tate)](#애플리케이션-상태-엔진으로서의-하이퍼미디어hypermedia-as-the-engine-of-application-state)
   - [1-3. HTTP methods](#1-3-http-methods)
 - [2. ControllerTest](#2-controllertest)
   - [2-1. Class annotations](#2-1-class-annotations)
   - [2-2. MockMvc](#2-2-mockmvc)
+  - [2-3. BDD](#2-3-bdd)
 - [3. Controller](#3-controller)
   - [3-1. Validation](#3-1-validation)
   - [3-2. ResponseEntity](#3-2-responseentity)
@@ -107,6 +104,38 @@
   - ## 2-2. MockMvc
     - Controller의 API를 테스트하기 위해 의존성을 주입하여 테스트
     - andExpect(ResultMatcher)를 사용하여 header, json을 검증
+    
+  - ## 2-3. BDD
+    > ### Given
+      - DB가 연관된 테스트라면 repository에 데이터 입력
+      ```
+      userRepository.save(userEntity);
+      ```
+      
+    > ### When
+      - mockMvc를 통한 Request
+      ```
+      mockMvc.perform([methodType]([URI]/{pathVariable}, [var])
+      ```
+      
+    > ### Then
+      - mockMvc에서 받은 Response
+      ```
+      // When
+      mockMvc.perform(...)
+      
+      // Then
+          .andDo(print()) // 요청/응답 출력
+          
+          // Header
+          .andExpect(status().isOk()) // HttpStatus가 200 OK 인지
+          .andExpect(header().exists(HttpHeaders.LOCATION)) // HttpHeaders.LOCATION 헤더가 존재하는지
+          .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE)) // Content-Type가 application/hal+json 인지
+          
+          // Body
+          .andExpect(jsonPath("path.of.json").exists())  // Key가 존재하는지
+          .andExpect(jsonPath("path.of.json").value())   // Value가 일치하는지
+      ```
     
 - ## 3. Controller
   - ## 3-1. Validation
