@@ -14,6 +14,7 @@
 - [3. EventController](#3-eventcontroller)
   - [3-1. Validation](#3-1-validation)
   - [3-2. ResponseEntity](#3-2-responseentity)
+  - [3-3. Parameters](#3-3-parameters)
 - [4. Spring HATEOAS 기능](#4-spring-hateoas-기능)
   - [4-1. 링크 작성 기능](#4-1-링크-작성-기능)
   - [4-2. 리소스 생성 기능](#4-2-리소스-생성-기능)
@@ -101,22 +102,60 @@
     - @Valid 어노테이션을 통한 validation
     - @Valid 어노테이션에서 validation 할 수 없는 경우에는 별도의 클래스를 생성하여 validation
     - 입력 시 불필요한 파라미터를 제한하기 위해 Entity를 Request에 직접 사용하지 않고, 별도로 DTO 클래스를 만들어 사용
+    
   - ## 3-2. ResponseEntity
     - 응답 HttpStatus를 지정할 수 있음(.badRequest(), .ok() 등)
     - 응답 Body를 지정할 수 있음(JSON 형태 응답의 경우 serialization을 해주어야 함)
-
+    
+  - ## 3-3. Parameters
+    > ### @PathVariable
+    - GET /user/1
+    ```
+    // User의 ID로 조회(PK)
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserResponseDto> getUser(@PathVariavle("id") int id){}
+    ```
+    
+    > ### @QueryParam / @RequestParam
+    - GET /user?name=gchyoo
+    - 둘의 차이는? QueryParam은 값이 들어오지 않아도 되지만, RequestParam은 값이 들어오지 않으면 오류 발생
+    ```
+    // User의 name으로 조회(Not PK)
+    @GetMapping("/user")
+    public ResponseEntity<List<UserResponseDto>> findUserByQueryParam(@QueryParam("name") String name) {}
+    
+    @GetMapping("/user")
+    public ResponseEntity<List<UserResponseDto>> findUserByRequestParam(@RequestParam("name") String name) {}
+    ```
+    
+    > ### @RequestBody
+    - POST /user
+      Body {
+        "id": "test@mail.com",
+        "name": "gchyoo",
+        ...
+      }
+    ```
+    // User를 생성
+    @PostMapping("/user")
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody UserRequestDto) {}
+    ```
+    
 - ## 4. Spring HATEOAS 기능
   - ## 4-1. 링크 작성 기능
     - 문자열로 링크 생성
     - 컨트롤러와 메서드로 링크 생성
+    
   - ## 4-2. 리소스 생성 기능
     - 리소스 : 데이터 + 링크
+    
   - ## 4-3. Relation(REL)
     - self : 자기 자신에 대한 URL
     - profile : 현재 응답에 대해 설명된 문서
     - update : 업데이트를 위한 URL
     - query : 조회를 위한 URL
     - ...
+    
   - ## 4-4. Deprecated classes
     - ResourceSupport => RepresentationModel
     - Resource => EntityModel
