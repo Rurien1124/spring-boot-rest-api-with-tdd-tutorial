@@ -159,7 +159,7 @@ public class EventControllerTest extends BaseControllerTest {
 	}
 	
 	@Test
-	@DisplayName("30개의 이벤트를 10개씩 두번째 페이지 조회하기")
+	@DisplayName("이벤트 페이징")
 	void queryEvents() throws Exception {
 		// Given
 		IntStream.range(0, 30)
