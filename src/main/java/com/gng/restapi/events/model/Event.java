@@ -8,6 +8,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import com.gng.restapi.accounts.model.Account;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,6 +63,10 @@ public class Event {
 	// Enum이 변경될 경우 DB가 꼬일 수 있으므로 String으로 변경
 	@Enumerated(EnumType.STRING)
 	private EventStatus eventStatus;
+	
+	// 사용자 계정을 1:n으로 단방향 매핑
+	@ManyToOne
+	private Account account;
 
 	/**
 	 * Update free/offline
