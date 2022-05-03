@@ -154,7 +154,7 @@
     ```
     // User의 ID로 조회(PK)
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserResponseDto> getUser(@PathVariavle("id") int id){}
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable("id") int id){}
     ```
     
     > ### @QueryParam / @RequestParam
