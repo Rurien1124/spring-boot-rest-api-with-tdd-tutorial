@@ -18,6 +18,7 @@
   - [4-2. 리소스 생성 기능](#4-2-리소스-생성-기능)
   - [4-3. Relation(REL)](#4-3-relationrel)
   - [4-4. Deprecated classes](#4-4-deprecated-classes)
+  - [4-5. EntityModel](#4-5-entitymodel)
 
 > <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
@@ -200,4 +201,49 @@
     - ResourceSupport => RepresentationModel
     - Resource => EntityModel
     - Resources => CollectionModel
-    - PagedResources => PagedModel    
+    - PagedResources => PagedModel
+  
+  - ## 4-5. EntityModel
+    - 링크 생성을 위해 EntityModel을 상속받은 CustomEntityModel
+    ```
+    public class CustomEntityModel extends EntityModel<CustomEntityClass> {
+      public CustomEntityModel(CustomEntityClass customEntityClass) {
+        super(customEntityClass);
+        
+        // 생성자에서 http://domain/api/custom/{id} 링크를 생성(self relation)
+        add(WebMvcLinkBuilder.linkTo(CustomController.class) // linkTo는 Controller 클래스의 @RequestMapping("/api/custom")으로 지정된 URI를 반환
+            .slash(customEntityClass.getId()) // slash는 '/'와 파라미터로 주어진 값을 표시
+            .withSelfRel() // "_links"의 "self" key에 들어가도록 함
+        );
+      }
+    }
+    ```
+    - CustomEntityModel 인스턴스에 링크를 추가
+    ```
+    // CustomEntityModel 인스턴스 생성
+    CustomEntityModel customEntityModel = new CustomEntityModel(customEntityClass);
+    
+    // http://domain/api/custom 링크 추가
+    customEntityModel.add(WebMvcLinkBuilder.linkTo(CustomController.class)
+        .withRel("query-customs"));
+    customEntityModel.add(WebMvcLinkBuilder.linkTo(CustomController.class)
+        .withRel("update-custom"));
+    ```
+    
+    - 응답 Body의 links
+    ```
+    {
+      ...
+      "_links": {
+          "self": {
+              "href": "http://domain/api/custom/1"
+          },
+          "query-customs": {
+              "href": "http://localhost/api/custom"
+          },
+          "update-custom": {
+              "href": "http://localhost/api/custom"
+          }
+      }
+    }
+    ```
